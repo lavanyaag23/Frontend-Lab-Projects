@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Responsive Web Page</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+
+<style>
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background: linear-gradient(to right, #eef2f3, #dfe9f3);
+}
+
+header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(102,126,234,0.85);
+    backdrop-filter: blur(10px);
+    color: white;
+    padding: 16px 40px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+}
+
+header h2 {
+    letter-spacing: 1px;
+}
+
+nav {
+    display: flex;
+    gap: 25px;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 6px 14px;
+    border-radius: 20px;
+    transition: 0.3s;
+}
+
+nav a.active,
+nav a:hover {
+    background: rgba(255,255,255,0.25);
+}
+
+.hero {
+    height: 300px;
+    background: linear-gradient(135deg, #667eea, #764ba2, #fda085);
+    background-size: 300% 300%;
+    animation: gradientMove 8s ease infinite;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+
+@keyframes gradientMove {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
+}
+
+.hero h1 {
+    font-size: 40px;
+    margin-bottom: 10px;
+}
+
+.hero button {
+    margin-top: 15px;
+    padding: 10px 22px;
+    border: none;
+    border-radius: 25px;
+    background: white;
+    color: #667eea;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.hero button:hover {
+    transform: scale(1.05);
+}
+
+.page-layout {
+    max-width: 1200px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    gap: 20px;
+    padding: 25px;
+}
+
+.main-content {
+    background: white;
+    padding: 25px;
+    border-radius: 14px;
+    border-left: 6px solid #66c7ea;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+}
+
+.sidebar {
+    background: linear-gradient(135deg, #667eea, #fda085);
+    padding: 25px;
+    border-radius: 14px;
+    color: white;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+}
+
+.container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 30px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+}
+
+.card {
+    background: white;
+    padding: 28px;
+    border-radius: 18px;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    transition: all 0.35s ease;
+    border-top: 5px solid #667eea;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, transparent, rgba(102,126,234,0.15));
+    opacity: 0;
+    transition: 0.3s;
+}
+
+.card:hover::after {
+    opacity: 1;
+}
+
+.card:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 18px 35px rgba(0,0,0,0.25);
+}
+
+footer {
+    text-align: center;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    padding: 20px;
+    margin-top: 30px;
+}
+
+@media (max-width: 992px) {
+    .grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .page-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+
+    header {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    nav {
+        flex-direction: column;
+        width: 100%;
+        text-align: center;
+    }
+
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+    .hero h1 {
+        font-size: 28px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+    <h2>My Website</h2>
+    <nav>
+        <a href="#" class="active">Home</a>
+        <a href="#">About</a>
+        <a href="#">Services</a>
+        <a href="#">Contact</a>
+    </nav>
+</header>
+
+<section class="hero">
+    <div>
+        <h1>Welcome to My Website</h1>
+        <p>Modern • Responsive • Attractive</p>
+        <button onclick="scrollToServices()">Explore Services</button>
+    </div>
+</section>
+
+<div class="page-layout">
+
+    <main class="main-content">
+        <h2>Main Content</h2>
+        <p>
+            This section demonstrates CSS Grid layout with proper use of the
+            CSS Box Model. The design is fully responsive and visually attractive.
+        </p>
+    </main>
+
+    <aside class="sidebar">
+        <h2>Sidebar</h2>
+        <p>Quick links<br>Announcements<br>Updates</p>
+    </aside>
+
+</div>
+
+<div class="container" id="services">
+    <h2 style="text-align:center; margin-bottom:25px;">Our Services</h2>
+
+    <div class="grid">
+        <div class="card"><h3>Web Design</h3><p>Modern responsive websites.</p></div>
+        <div class="card"><h3>App Development</h3><p>Android and iOS apps.</p></div>
+        <div class="card"><h3>SEO</h3><p>Improve search ranking.</p></div>
+        <div class="card"><h3>Cloud</h3><p>Cloud deployment services.</p></div>
+        <div class="card"><h3>AI Solutions</h3><p>Smart automation systems.</p></div>
+        <div class="card"><h3>Support</h3><p>24/7 technical support.</p></div>
+    </div>
+</div>
+
+<footer>
+    <p>© <span id="year"></span> My Website | Designed by Lavanya</p>
+</footer>
+
+<script>
+document.getElementById("year").textContent = new Date().getFullYear();
+
+function scrollToServices() {
+    document.getElementById("services").scrollIntoView({behavior:"smooth"});
+}
+</script>
+
+</body>
+</html>

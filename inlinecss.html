@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Static Website - Inline CSS</title>
+</head>
+
+<body style="font-family: Arial; margin:0;">
+
+<!-- Navigation Bar -->
+<div style="background:#333; padding:15px; text-align:center;">
+    <a href="#home" style="color:white; margin:15px; text-decoration:none; font-weight:bold;">Home</a>
+    <a href="#about" style="color:white; margin:15px; text-decoration:none; font-weight:bold;">About</a>
+    <a href="#services" style="color:white; margin:15px; text-decoration:none; font-weight:bold;">Services</a>
+    <a href="#contact" style="color:white; margin:15px; text-decoration:none; font-weight:bold;">Contact</a>
+</div>
+
+<!-- Home Section -->
+<div id="home" style="padding:30px; text-align:center;">
+    <h2 style="color:#333;">Welcome to Our Website</h2>
+    <img src="https://via.placeholder.com/300"
+         style="width:300px; border-radius:10px;">
+    <p style="font-size:16px;">
+        We provide high-quality web and software solutions.
+    </p>
+</div>
+
+<!-- About Section -->
+<div id="about" style="padding:30px; background:#f4f4f4;">
+    <h2 style="color:#333; text-align:center;">About Us</h2>
+    <p style="margin:20px; font-size:16px; line-height:1.6;">
+        Our company focuses on delivering innovative and reliable
+        technology solutions. We aim to provide the best services
+        to our customers with modern tools and techniques.
+    </p>
+</div>
+
+<!-- Services Section -->
+<div id="services" style="padding:30px; text-align:center;">
+    <h2 style="color:#333;">Our Services</h2>
+
+    <table style="margin:auto; border-collapse:collapse; width:70%;">
+        <tr style="background:#4CAF50; color:white;">
+            <th style="border:1px solid black; padding:8px;">Service</th>
+            <th style="border:1px solid black; padding:8px;">Description</th>
+            <th style="border:1px solid black; padding:8px;">Price (₹)</th>
+        </tr>
+        <tr>
+            <td style="border:1px solid black; padding:8px;">Web Design</td>
+            <td style="border:1px solid black; padding:8px;">Responsive websites</td>
+            <td style="border:1px solid black; padding:8px;">5000</td>
+        </tr>
+        <tr>
+            <td style="border:1px solid black; padding:8px;">App Development</td>
+            <td style="border:1px solid black; padding:8px;">Android apps</td>
+            <td style="border:1px solid black; padding:8px;">8000</td>
+        </tr>
+        <tr>
+            <td style="border:1px solid black; padding:8px;">SEO</td>
+            <td style="border:1px solid black; padding:8px;">Search optimization</td>
+            <td style="border:1px solid black; padding:8px;">3000</td>
+        </tr>
+    </table>
+</div>
+
+<!-- Contact Section -->
+<div id="contact" style="padding:30px; background:#f4f4f4;">
+    <h2 style="text-align:center;">Contact Us</h2>
+
+    <form style="text-align:center;">
+        Name:<br>
+        <input type="text" style="padding:8px; width:250px;"><br><br>
+
+        Email:<br>
+        <input type="email" style="padding:8px; width:250px;"><br><br>
+
+        Message:<br>
+        <textarea rows="4" cols="30" style="padding:8px;"></textarea><br><br>
+
+        <input type="submit" value="Submit"
+               style="padding:10px 20px; background:#333; color:white; border:none;">
+    </form>
+</div>
+
+</body>
+</html>

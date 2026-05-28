@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title> DOM & Event Handling Demo </title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        background-color: #f0f2f5;
+        margin: 0;
+        padding: 0;
+        transition: background-color 0.5s, color 0.5s;
+    }
+
+    .container {
+        width: 70%;
+        margin: 60px auto;
+        padding: 30px;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0px 6px 20px rgba(0,0,0,0.2);
+        transition: 0.5s;
+    }
+
+    h1 {
+        margin-bottom: 20px;
+    }
+
+    p {
+        font-size: 18px;
+        margin: 15px 0;
+        transition: all 0.3s ease;
+    }
+
+    button {
+        padding: 10px 15px;
+        margin: 8px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        background-color: #4CAF50;
+        color: white;
+        transition: 0.3s;
+    }
+
+    .button-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+    }
+
+    .button-group button {
+    width: 150px;
+    }
+
+    button:hover {
+        background-color: #45a049;
+        transform: scale(1.05);
+    }
+
+    .dark-mode {
+        background-color: #1e1e1e;
+        color: white;
+        font-size: 19px;
+    }
+
+    .dark-mode .container {
+        background-color: #333;
+    }
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1 id="mainHeading"> Lavanya's Advanced DOM Interaction</h1>
+
+    <select id="themeSelect">
+    <option value="">Select Theme</option>
+    <option value="light">Light</option>
+    <option value="dark">Dark</option>
+    </select>
+
+    <p id="para1">This is the first paragraph. It will change dynamically.</p>
+    <p id="para2">This is the second paragraph. You can style it.</p>
+    <p id="dateTime"></p>
+     
+    <div class="input-section">
+       <input type="text" id="userInput" placeholder="Enter new paragraph text">
+       <button id="updateFromInput">Update Text</button>
+    </div>
+
+    <p>Button Click Count: <span id="counter">0</span></p>
+    <button id="countBtn">Click Me</button>
+
+    <div class="image-section">
+    <img id="demoImage" src="https://www.xcitium.com/blog/wp-content/uploads/2025/10/what-is-a-dom.png" alt="DOM Image" width="300px" height="200px">
+    <br>
+    <button id="changeImage">Change Image</button>
+    </div>
+
+    <div class="button-group">
+        <button id="changeTextBtn">Change Text</button>
+        <button id="changeColorBtn">Change Color</button>
+        <button id="increaseSizeBtn">Increase Size</button>
+
+        <button id="addBorderBtn">Add Border</button>
+        <button id="bgBtn">Random Background</button>
+        <button id="darkModeBtn">Dark Mode</button>
+
+        <button id="resetBtn">Reset</button>
+    </div>
+
+</div>
+
+<script>
+
+    const para1 = document.getElementById("para1");
+    const para2 = document.getElementById("para2");
+    const body = document.body;
+    const heading = document.getElementById("mainHeading");
+
+    let textSize = 20;
+    let count = 0;
+
+    document.getElementById("countBtn").addEventListener("click", function() {
+    count++;
+    document.getElementById("counter").textContent = count;
+    });
+
+    document.getElementById("updateFromInput").addEventListener("click", function() {
+    const inputValue = document.getElementById("userInput").value;
+    para1.textContent = inputValue;
+    });
+
+    document.getElementById("changeTextBtn").addEventListener("click", function() {
+        para1.textContent = "The first paragraph text has been changed using DOM manipulation!";
+        para2.textContent = "The second paragraph text has  been changed by Lavanya!";
+    });
+
+    document.getElementById("changeColorBtn").addEventListener("click", function() {
+        para1.style.color = "purple";
+        para2.style.color = "red";
+    });
+
+    document.getElementById("increaseSizeBtn").addEventListener("click", function() {
+        textSize += 2;
+        para1.style.fontSize = textSize + "px";
+        para2.style.fontSize = textSize + "px";
+    });
+
+    document.getElementById("addBorderBtn").addEventListener("click", function() {
+        para1.style.border = "2px solid green";
+        para1.style.padding = "10px";
+        para2.style.border = "2px solid green";
+        para2.style.padding = "10px";
+    });
+
+    document.getElementById("bgBtn").addEventListener("click", function() {
+        const randomColor = "#" + Math.floor(Math.random()*16777215).toString(16);
+        body.style.backgroundColor = randomColor;
+    });
+
+    document.getElementById("darkModeBtn").addEventListener("click", function() {
+        body.classList.toggle("dark-mode");
+    });
+
+    document.getElementById("changeImage").addEventListener("click", function() {
+    document.getElementById("demoImage").src = "data:image/jpeg;base64,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";
+    });
+
+    document.getElementById("resetBtn").addEventListener("click", function() {
+        para1.textContent = "The first paragraph text has been changed using DOM manipulation!";
+        para2.textContent = "The second paragraph text has  been changed by Lavanya!";
+        para1.style.color = "black";
+        para2.style.color = "black";
+        para1.style.fontSize = "18px";
+        para2.style.fontSize = "18px";
+        para1.style.border = "none";
+        para2.style.border = "none";
+        body.style.backgroundColor = "#f0f2f5";
+        body.classList.remove("dark-mode");
+        textSize = 18;
+        count = 0;
+    document.getElementById("counter").textContent = count;
+    });
+
+</script>
+
+</body>
+</html>
