@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Async JavaScript Demo</title>
+<style>
+    body {
+        font-family: Arial;
+        text-align: center;
+        background: linear-gradient(to right, #dfe9f3, #ffffff);
+        padding: 30px;
+    }
+
+    h1 { margin-bottom: 20px; }
+
+    .controls {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+
+    button {
+        padding: 10px 15px;
+        border: none;
+        background: #4CAF50;
+        color: white;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    button:hover { transform: scale(1.05); }
+
+    button:disabled {
+        background: #999;
+        cursor: not-allowed;
+    }
+
+    #output {
+        margin: 20px auto;
+        background: linear-gradient(135deg, #ffffff, #e6f0ff);
+        padding: 15px;
+        border-radius: 10px;
+        height: 250px;
+        width: 60%;
+        overflow-y: auto;
+        text-align: center;
+        box-shadow: 0px 4px 15px rgba(0,0,0,0.2);
+        border: 2px solid #4CAF50;
+    }
+
+    .log { margin: 8px 0; text-align: center; }
+    .success { color: green; }
+    .error { color: red; }
+    .info { color: #333; }
+
+    .loader {
+        display: none;
+        margin-top: 10px;
+    }
+
+    .spinner {
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #4CAF50;
+        border-radius: 50%;
+        width: 25px;
+        height: 25px;
+        animation: spin 1s linear infinite;
+        margin: auto;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+</style>
+</head>
+<body>
+
+<h1>Async JavaScript Interactive Demo</h1>
+
+<div class="controls">
+<button onclick="runCallbackDemo()">Callback</button>
+<button onclick="runCallbackHell()">Callback Hell</button>
+<button onclick="runPromiseDemo()">Promise</button>
+<button onclick="runAsyncAwait()">Async/Await</button>
+<button onclick="clearOutput()">Clear</button>
+</div>
+
+<div class="loader" id="loader">
+    <div class="spinner"></div>
+</div>
+
+<div id="output"></div>
+
+<script>
+const buttons = document.querySelectorAll("button");
+
+function disableButtons(state) {
+    buttons.forEach(btn => btn.disabled = state);
+}
+
+function log(message, type = "info") {
+    const output = document.getElementById("output");
+    const time = new Date().toLocaleTimeString();
+    output.innerHTML += `<div class='log ${type}'>[${time}] ${message}</div>`;
+    output.scrollTop = output.scrollHeight;
+}
+
+function showLoader(show) {
+    document.getElementById("loader").style.display = show ? "block" : "none";
+}
+
+// Callback Demo
+function fetchData(callback) {
+    log("Fetching data...");
+    showLoader(true);
+    disableButtons(true);
+
+    setTimeout(function () {
+        log("Data fetched successfully", "success");
+        callback();
+        showLoader(false);
+        disableButtons(false);
+    }, 2000);
+}
+
+function processData() {
+    log("Processing fetched data", "info");
+}
+
+function runCallbackDemo() {
+    log("--- Callback Demo Started ---");
+    fetchData(processData);
+}
+
+// Callback Hell
+function task1(callback) {
+    setTimeout(() => {
+        log("Task 1 completed", "success");
+        callback();
+    }, 1000);
+}
+
+function task2(callback) {
+    setTimeout(() => {
+        log("Task 2 completed", "success");
+        callback();
+    }, 1000);
+}
+
+function task3(callback) {
+    setTimeout(() => {
+        log("Task 3 completed", "success");
+        callback();
+    }, 1000);
+}
+
+function runCallbackHell() {
+    log("--- Callback Hell Started ---");
+    showLoader(true);
+    disableButtons(true);
+
+    task1(function () {
+        task2(function () {
+            task3(function () {
+                log("All tasks completed", "success");
+                showLoader(false);
+                disableButtons(false);
+            });
+        });
+    });
+}
+
+// Promise Demo
+function fetchDataPromise() {
+    return new Promise((resolve, reject) => {
+        log("Fetching data...");
+        showLoader(true);
+        disableButtons(true);
+
+        setTimeout(() => {
+            let success = Math.random() > 0.3;
+
+            if (success) {
+                resolve("Data fetched successfully");
+            } else {
+                reject("Error fetching data");
+            }
+        }, 2000);
+    });
+}
+
+function runPromiseDemo() {
+    log("--- Promise Demo Started ---");
+    fetchDataPromise()
+        .then(result => log(result, "success"))
+        .catch(error => log(error, "error"))
+        .finally(() => {
+            showLoader(false);
+            disableButtons(false);
+        });
+}
+
+// Async/Await
+function fetchDataAsync() {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve("Data fetched using async-await");
+        }, 2000);
+    });
+}
+
+async function getData() {
+    log("--- Async/Await Demo Started ---");
+    log("Fetching data...");
+    showLoader(true);
+    disableButtons(true);
+
+    try {
+        let result = await fetchDataAsync();
+        log(result, "success");
+    } catch (error) {
+        log(error, "error");
+    }
+
+    showLoader(false);
+    disableButtons(false);
+}
+
+function runAsyncAwait() {
+    getData();
+}
+
+function clearOutput() {
+    document.getElementById("output").innerHTML = "";
+}
+</script>
+
+<footer style="margin-top:30px; padding:15px; background:#4CAF50; color:white; border-radius:10px; width:60%;
+ margin-left:auto; margin-right:auto; box-shadow:0px 4px 10px rgba(0,0,0,0.2);">
+    <p> Async Demo by Lavanya</p>
+</footer>
+
+</body>
+</html>
+
+

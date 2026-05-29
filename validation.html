@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Form Validation</title>
+
+<script>
+function validateForm() {
+
+    // get values
+    let name = document.getElementById("name").value.trim();
+    let email = document.getElementById("email").value.trim();
+    let password = document.getElementById("password").value;
+    let confirmPassword = document.getElementById("confirm").value;
+    let mobile = document.getElementById("mobile").value.trim();
+    let gender = document.querySelector('input[name="gender"]:checked');
+    let terms = document.getElementById("terms").checked;
+
+    // name
+    if (name === "") {
+        alert("Name is required");
+        return false;
+    }
+
+    // email
+    let emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+    if (!email.match(emailPattern)) {
+        alert("Enter valid email");
+        return false;
+    }
+
+    // password length
+    if (password.length < 8) {
+        alert("Password must be at least 8 characters");
+        return false;
+    }
+
+    // confirm password
+    if (password !== confirmPassword) {
+        alert("Passwords do not match");
+        return false;
+    }
+
+    // mobile validation
+    let phonePattern = /^[0-9]{10}$/;
+    if (!mobile.match(phonePattern)) {
+        alert("Enter valid 10-digit mobile number");
+        return false;
+    }
+
+    // gender
+    if (!gender) {
+        alert("Select gender");
+        return false;
+    }
+
+    // terms
+    if (!terms) {
+        alert("Accept terms and conditions");
+        return false;
+    }
+
+    alert("Form submitted successfully!");
+    return true;
+}
+</script>
+</head>
+
+<body>
+
+<h2>User Registration</h2>
+
+<form onsubmit="return validateForm()">
+
+Name:
+<input type="text" id="name"><br><br>
+
+Email:
+<input type="text" id="email"><br><br>
+
+Password:
+<input type="password" id="password"><br><br>
+
+Confirm Password:
+<input type="password" id="confirm"><br><br>
+
+Mobile:
+<input type="text" id="mobile"><br><br>
+
+Gender:
+<input type="radio" name="gender" value="Male"> Male
+<input type="radio" name="gender" value="Female"> Female
+<br><br>
+
+<input type="checkbox" id="terms"> I accept Terms & Conditions
+<br><br>
+
+<input type="submit" value="Submit">
+
+</form>
+
+</body>
+</html>

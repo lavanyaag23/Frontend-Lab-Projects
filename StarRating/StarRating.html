@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Advanced Star Rating ⭐</title>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<style>
+body {
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+    margin-top: 100px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+}
+
+.container {
+    background: white;
+    color: black;
+    padding: 30px;
+    width: 300px;
+    margin: auto;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+.stars {
+    font-size: 45px;
+}
+
+.star {
+    color: lightgray;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.star:hover {
+    transform: scale(1.3);
+}
+
+.star.selected {
+    color: gold;
+    text-shadow: 0 0 10px gold;
+}
+
+.star.hover {
+    color: orange;
+}
+
+#message {
+    margin-top: 15px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+#emoji {
+    font-size: 30px;
+    margin-top: 10px;
+}
+
+button {
+    margin-top: 15px;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 8px;
+    background: #ff4d4d;
+    color: white;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #e60000;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>Rate Us ⭐</h2>
+
+    <div class="stars">
+        <span class="star" data-value="1">★</span>
+        <span class="star" data-value="2">★</span>
+        <span class="star" data-value="3">★</span>
+        <span class="star" data-value="4">★</span>
+        <span class="star" data-value="5">★</span>
+    </div>
+
+    <p id="message">Select your rating</p>
+    <div id="emoji"></div>
+
+    <button id="reset">Reset</button>
+</div>
+
+ <div class="footer">
+        Made by <span>Lavanya</span>
+ </div>
+
+<script>
+$(document).ready(function () {
+
+    let selectedRating = localStorage.getItem("rating") || 0;
+
+    updateUI(selectedRating);
+
+    $(".star").hover(function () {
+        let value = $(this).data("value");
+        highlightStars(value);
+    }, function () {
+        highlightStars(selectedRating);
+    });
+
+    $(".star").click(function () {
+        selectedRating = $(this).data("value");
+        localStorage.setItem("rating", selectedRating);
+        updateUI(selectedRating);
+    });
+
+    $("#reset").click(function () {
+        selectedRating = 0;
+        localStorage.removeItem("rating");
+        updateUI(0);
+    });
+
+    function highlightStars(rating) {
+        $(".star").each(function () {
+            $(this).toggleClass("selected", $(this).data("value") <= rating);
+        });
+    }
+
+    function updateUI(rating) {
+        highlightStars(rating);
+
+        if (rating == 0) {
+            $("#message").text("Select your rating");
+            $("#emoji").text("");
+        } else {
+            $("#message").text("You rated " + rating + " stars");
+            $("#emoji").text(getEmoji(rating));
+        }
+    }
+
+    function getEmoji(rating) {
+        switch (rating) {
+            case 1: return "😞";
+            case 2: return "😐";
+            case 3: return "🙂";
+            case 4: return "😊";
+            case 5: return "😍";
+        }
+    }
+
+});
+</script>
+
+</body>
+</html>
+

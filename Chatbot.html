@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Lavanya AI 💻</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins';}
+
+:root{
+--bg:#f8fafc;
+--sidebar:#ffffff;
+--chat:#f1f5f9;
+--user:#6366f1;
+--bot:#e2e8f0;
+--text:#0f172a;
+--accent:#8b5cf6;
+}
+
+body{
+display:grid;
+grid-template-columns:260px 1fr;
+height:100vh;
+background:var(--bg);
+color:var(--text);
+}
+
+.sidebar{
+background:var(--sidebar);
+padding:15px;
+display:flex;
+flex-direction:column;
+gap:10px;
+border-right:1px solid #ddd;
+}
+
+.sidebar h2{color:var(--accent);}
+
+.history{
+flex:1;
+overflow-y:auto;
+}
+
+.history div{
+padding:10px;
+border-radius:10px;
+background:var(--bot);
+cursor:pointer;
+transition:0.3s;
+}
+
+.history div:hover{
+background:var(--accent);
+color:white;
+}
+
+.chat-container{
+display:grid;
+grid-template-rows:60px 1fr 70px;
+height:100vh;
+}
+
+.chat-header{
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:15px;
+background:var(--user);
+color:white;
+font-weight:bold;
+}
+
+.chat-box{
+padding:15px;
+overflow-y:auto;
+display:flex;
+flex-direction:column;
+gap:10px;
+}
+
+.message{
+padding:12px;
+border-radius:12px;
+max-width:70%;
+animation:fade 0.3s ease;
+}
+
+@keyframes fade{
+from{opacity:0;transform:translateY(10px);}
+to{opacity:1;}
+}
+
+.user{
+background:var(--user);
+color:white;
+align-self:flex-end;
+}
+
+.bot{
+background:var(--bot);
+}
+
+.time{
+font-size:10px;
+opacity:0.6;
+text-align:right;
+margin-top:4px;
+}
+
+.chat-input{
+display:flex;
+gap:10px;
+padding:10px;
+background:var(--sidebar);
+border-top:1px solid #ddd;
+}
+
+input{
+flex:1;
+padding:12px;
+border-radius:10px;
+border:1px solid #ccc;
+outline:none;
+}
+
+button{
+padding:10px 15px;
+border:none;
+border-radius:10px;
+cursor:pointer;
+background:var(--user);
+color:white;
+transition:0.3s;
+}
+
+button:hover{
+background:var(--accent);
+}
+
+@media(max-width:700px){
+body{grid-template-columns:1fr;}
+.sidebar{display:none;}
+}
+</style>
+</head>
+
+<body>
+
+<div class="sidebar">
+<h2>💬 Lavanya AI</h2>
+<button onclick="newChat()">New Chat</button>
+<button onclick="downloadChat()">Download</button>
+<input placeholder="Search..." oninput="searchChat(this.value)">
+<div class="history" id="history"></div>
+</div>
+
+<div class="chat-container">
+
+<div class="chat-header">
+Lavanya AI 💻
+</div>
+
+<div class="chat-box" id="chat-box"></div>
+
+<div class="chat-input">
+<input id="input" placeholder="Ask anything (DSA, React, Coding...)">
+<button onclick="send()">Send</button>
+</div>
+
+</div>
+
+<script>
+
+let memory = JSON.parse(localStorage.getItem("lavanyaMemory")) || {
+name:null,
+interest:"frontend"
+};
+
+let chats=JSON.parse(localStorage.getItem("lavanyaChats"))||[];
+let currentChatIndex=null;
+
+function saveChats(){
+localStorage.setItem("lavanyaChats",JSON.stringify(chats));
+}
+
+function loadHistory(){
+let h=document.getElementById("history");
+h.innerHTML="";
+chats.forEach((c,i)=>{
+let d=document.createElement("div");
+d.innerText="Chat "+(i+1);
+d.onclick=()=>loadChat(i);
+h.appendChild(d);
+});
+}
+
+function loadChat(i){
+currentChatIndex=i;
+document.getElementById("chat-box").innerHTML="";
+chats[i].forEach(m=>addMessage(m.text,m.type,false));
+}
+
+function newChat(){
+currentChatIndex=chats.length;
+chats.push([]);
+document.getElementById("chat-box").innerHTML="";
+saveChats();
+loadHistory();
+}
+
+function send(){
+let input=document.getElementById("input");
+let msg=input.value.trim();
+if(!msg) return;
+
+addMessage(msg,"user",true);
+input.value="";
+
+setTimeout(()=>{
+let reply=botReply(msg);
+addMessage(reply,"bot",true);
+},500);
+}
+
+function addMessage(text,type,saveFlag){
+let box=document.getElementById("chat-box");
+
+let div=document.createElement("div");
+div.className="message "+type;
+
+let time=new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+
+div.innerHTML=text+`<div class="time">${time}</div>`;
+box.appendChild(div);
+box.scrollTop=box.scrollHeight;
+
+if(saveFlag){
+if(currentChatIndex===null) newChat();
+chats[currentChatIndex].push({text,type,time});
+saveChats();
+}
+}
+
+function searchChat(q){
+document.querySelectorAll(".message").forEach(m=>{
+m.style.display=m.innerText.toLowerCase().includes(q.toLowerCase())?"block":"none";
+});
+}
+
+function downloadChat(){
+if(currentChatIndex===null) return;
+let data=chats[currentChatIndex].map(m=>m.type+": "+m.text).join("\n");
+let blob=new Blob([data]);
+let a=document.createElement("a");
+a.href=URL.createObjectURL(blob);
+a.download="lavanya_chat.txt";
+a.click();
+}
+
+function botReply(msg){
+msg=msg.toLowerCase();
+
+if(msg.includes("my name is")){
+let name=msg.split("my name is")[1].trim();
+memory.name=name;
+saveMemory();
+return "Nice to meet you "+name+" 👩‍💻";
+}
+
+if(msg.includes("what is my name")){
+return memory.name ? "Your name is "+memory.name : "I don't know yet 😅";
+}
+
+if(msg.includes("dsa")) return "Focus on arrays, trees & recursion first 💡";
+if(msg.includes("react")) return "Use components + hooks (useState, useEffect) 🔥";
+if(msg.includes("javascript")) return "Master closures, promises & async/await ⚡";
+if(msg.includes("project")) return "Build real projects like chatbot or dashboard 💻";
+if(msg.includes("frontend")) return "HTML + CSS + JS + React = solid roadmap 🚀";
+
+if(msg.includes("hi")||msg.includes("hello")){
+return memory.name ? "Hey "+memory.name+" 👋 Ready to code?" : "Hello 👋";
+}
+
+if(msg.includes("joke")) return "Why do devs hate bugs? Because they debug life 😂";
+if(msg.includes("how are you")) return "Running smooth like optimized code 😎";
+
+let r=[
+"Keep coding 💻",
+"Interesting problem 🤔",
+"Try breaking it into smaller parts 🔍",
+"Debug step by step 🛠"
+];
+return r[Math.floor(Math.random()*r.length)];
+}
+
+function saveMemory(){
+localStorage.setItem("lavanyaMemory",JSON.stringify(memory));
+}
+
+document.getElementById("input").addEventListener("keypress",e=>{
+if(e.key==="Enter") send();
+});
+
+window.onload=loadHistory;
+
+</script>
+
+</body>
+</html>

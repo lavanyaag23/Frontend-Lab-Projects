@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Registration Form</title>
+    <style>
+        body {
+            font-family: Arial;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            width: 400px;
+            margin: 40px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 6px;
+            box-shadow: 0 0 10px #ccc;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 6px;
+            margin-top: 5px;
+        }
+
+        .error {
+            color: red;
+            font-size: 13px;
+        }
+
+        .success {
+            color: green;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        button {
+            margin-top: 15px;
+            padding: 8px;
+            width: 100%;
+            background-color: #333;
+            color: white;
+            border: none;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>User Registration</h2>
+
+    <form id="regForm">
+
+        <label>Full Name:</label>
+        <input type="text" id="fullname">
+        <div class="error" id="nameError"></div>
+
+        <label>Email:</label>
+        <input type="email" id="email">
+        <div class="error" id="emailError"></div>
+
+        <label>Password:</label>
+        <input type="password" id="password">
+        <div class="error" id="passwordError"></div>
+
+        <label>Confirm Password:</label>
+        <input type="password" id="confirmPassword">
+        <div class="error" id="confirmError"></div>
+
+        <label>Mobile Number:</label>
+        <input type="text" id="mobile">
+        <div class="error" id="mobileError"></div>
+
+        <label>Gender:</label>
+        <input type="radio" name="gender" value="Male"> Male
+        <input type="radio" name="gender" value="Female"> Female
+        <div class="error" id="genderError"></div>
+
+        <label>
+            <input type="checkbox" id="terms"> I agree to Terms & Conditions
+        </label>
+        <div class="error" id="termsError"></div>
+
+        <button type="submit">Submit</button>
+
+        <div class="success" id="successMessage"></div>
+
+    </form>
+</div>
+
+<script>
+document.getElementById("regForm").addEventListener("submit", function(event) {
+
+    event.preventDefault(); 
+
+    document.getElementById("nameError").innerHTML = "";
+    document.getElementById("emailError").innerHTML = "";
+    document.getElementById("passwordError").innerHTML = "";
+    document.getElementById("confirmError").innerHTML = "";
+    document.getElementById("mobileError").innerHTML = "";
+    document.getElementById("genderError").innerHTML = "";
+    document.getElementById("termsError").innerHTML = "";
+    document.getElementById("successMessage").innerHTML = "";
+
+    let isValid = true;
+
+    let name = document.getElementById("fullname").value.trim();
+    let email = document.getElementById("email").value.trim();
+    let password = document.getElementById("password").value;
+    let confirmPassword = document.getElementById("confirmPassword").value;
+    let mobile = document.getElementById("mobile").value.trim();
+    let gender = document.querySelector('input[name="gender"]:checked');
+    let terms = document.getElementById("terms").checked;
+
+    if (name === "") {
+        document.getElementById("nameError").innerHTML = "Full Name is required";
+        isValid = false;
+    }
+
+    let emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+    if (email === "") {
+        document.getElementById("emailError").innerHTML = "Email is required";
+        isValid = false;
+    } else if (!email.match(emailPattern)) {
+        document.getElementById("emailError").innerHTML = "Enter valid email";
+        isValid = false;
+    }
+
+    if (password.length < 8) {
+        document.getElementById("passwordError").innerHTML = "Password must be at least 8 characters";
+        isValid = false;
+    }
+
+    if (confirmPassword !== password || confirmPassword === "") {
+        document.getElementById("confirmError").innerHTML = "Passwords do not match";
+        isValid = false;
+    }
+
+    let mobilePattern = /^[0-9]{10}$/;
+    if (!mobile.match(mobilePattern)) {
+        document.getElementById("mobileError").innerHTML = "Mobile number must be 10 digits";
+        isValid = false;
+    }
+
+    if (!gender) {
+        document.getElementById("genderError").innerHTML = "Please select gender";
+        isValid = false;
+    }
+
+    if (!terms) {
+        document.getElementById("termsError").innerHTML = "You must accept Terms & Conditions";
+        isValid = false;
+    }
+
+    if (isValid) {
+        document.getElementById("successMessage").innerHTML = "Registration Successful!";
+    }
+
+});
+</script>
+
+</body>
+</html>
