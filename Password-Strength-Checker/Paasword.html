@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Password Strength Checker</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+        }
+
+        .container {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 20px;
+            width: 360px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+            text-align: center;
+            position: relative;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #2a5298;
+        }
+
+        .input-box {
+            position: relative;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: 2px solid #ccc;
+            outline: none;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+        input:focus {
+            border-color: #2a5298;
+        }
+        .toggle {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #555;
+        }
+
+        #strength-bar {
+            width: 100%;
+            height: 12px;
+            background: #eee;
+            border-radius: 10px;
+            margin-top: 15px;
+            overflow: hidden;
+        }
+
+        #strength-fill {
+            height: 100%;
+            width: 0%;
+            border-radius: 10px;
+            transition: all 0.5s ease-in-out;
+        }
+
+        #strength-text {
+            margin-top: 10px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        ul {
+            text-align: left;
+            margin-top: 15px;
+            padding-left: 20px;
+        }
+
+        li {
+            font-size: 14px;
+            margin: 6px 0;
+            color: gray;
+            transition: 0.3s;
+        }
+
+        .valid {
+            color: green;
+            font-weight: bold;
+        }
+
+        .footer {
+            margin-top: 20px;
+            font-size: 13px;
+            color: #888;
+        }
+
+        .footer span {
+            color: #2a5298;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <h2>🔐 Password Checker</h2>
+
+    <div class="input-box">
+        <input type="password" id="password" placeholder="Enter password">
+        <span class="toggle" id="toggleBtn">Show</span>
+    </div>
+
+    <div id="strength-bar">
+        <div id="strength-fill"></div>
+    </div>
+
+    <p id="strength-text"></p>
+    <ul>
+        <li id="length">✔ At least 6 characters</li>
+        <li id="case">✔ Upper & Lowercase</li>
+        <li id="number">✔ At least 1 number</li>
+        <li id="special">✔ Special character (@$!%*?&)</li>
+    </ul>
+
+    <div class="footer">
+        Made by <span>Lavanya</span>
+    </div>
+</div>
+
+<script>
+$(document).ready(function() {
+    $("#toggleBtn").click(function() {
+        let input = $("#password");
+        if (input.attr("type") === "password") {
+            input.attr("type", "text");
+            $(this).text("Hide");
+        } else {
+            input.attr("type", "password");
+            $(this).text("Show");
+        }
+    });
+    $("#password").on("keyup", function() {
+        let password = $(this).val();
+        let strength = 0;
+
+        if (password.length >= 6) {
+            $("#length").addClass("valid");
+            strength++;
+        } else {
+            $("#length").removeClass("valid");
+        }
+        if (password.match(/[a-z]/) && password.match(/[A-Z]/)) {
+            $("#case").addClass("valid");
+            strength++;
+        } else {
+            $("#case").removeClass("valid");
+        }
+        if (password.match(/\d/)) {
+            $("#number").addClass("valid");
+            strength++;
+        } else {
+            $("#number").removeClass("valid");
+        }
+
+        if (password.match(/[@$!%*?&]/)) {
+            $("#special").addClass("valid");
+            strength++;
+        } else {
+            $("#special").removeClass("valid");
+        }
+
+        updateStrength(strength);
+    });
+
+    function updateStrength(strength) {
+        let width = 0;
+        let color = "";
+        let text = "";
+        if (strength == 1) {
+            width = 25; color = "#ff4d4d"; text = "Weak 😞";
+        } else if (strength == 2) {
+            width = 50; color = "#ffa500"; text = "Medium 😐";
+        } else if (strength == 3) {
+            width = 75; color = "#00bfff"; text = "Strong 💪";
+        } else if (strength == 4) {
+            width = 100; color = "#28a745"; text = "Very Strong 🔥";
+        } else {
+            text = "";
+        }
+
+        $("#strength-fill").css({
+            "width": width + "%",
+            "background": color
+        });
+
+        $("#strength-text").text(text);
+    }
+
+});
+</script>
+
+</body>
+</html>
